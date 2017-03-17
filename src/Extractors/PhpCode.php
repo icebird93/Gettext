@@ -20,6 +20,7 @@ class PhpCode extends Extractor implements ExtractorInterface
         'constants' => [],
 
         'functions' => [
+            '_' => 'gettext',
             'gettext' => 'gettext',
             '__' => 'gettext',
             'ngettext' => 'ngettext',
