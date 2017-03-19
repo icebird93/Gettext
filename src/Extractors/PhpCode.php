@@ -28,6 +28,7 @@ class PhpCode extends Extractor implements ExtractorInterface
             'pgettext' => 'pgettext',
             'p__' => 'pgettext',
             'dgettext' => 'pgettext',
+            'dngettext' => 'npgettext',
             'd__' => 'pgettext',
             'dpgettext' => 'dpgettext',
             'dp__' => 'dpgettext',
