@@ -77,9 +77,7 @@ class PhpCode extends Extractor implements ExtractorInterface
 
         $value = substr($value, 1, -1);
 
-        return preg_replace_callback(
-            '/\\\(n|r|t|v|e|f|\$|"|\\\|x[0-9A-Fa-f]{1,2}|u{[0-9a-f]{1,6}}|[0-7]{1,3})/',
-            function ($match) {
+        return preg_replace_callback('/\\\(n|r|t|v|e|f|\$|"|\\\|x[0-9A-Fa-f]{1,2}|u{[0-9a-f]{1,6}}|[0-7]{1,3})/', function ($match) {
             switch ($match[1][0]) {
                 case 'n':
                     return "\n";
