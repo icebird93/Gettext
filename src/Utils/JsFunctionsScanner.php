@@ -36,17 +36,22 @@ class JsFunctionsScanner extends FunctionsScanner
 
             switch ($char) {
                 case '\\':
+                    $char = ($next === "'" || $next === '"') ? $next : $char.$next;
                     $prev = $char;
-                    $char = $next;
                     $pos++;
-                    $next = isset($this->code[$pos]) ? $this->code[$pos] : null;
+                    $next = isset($this->code[$pos + 1]) ? $this->code[$pos + 1] : null;
                     break;
 
                 case "\n":
                     ++$line;
 
-                    if ($this->status('line-comment')) {
-                        $this->upStatus();
+                    switch ($this->status()) {
+                        case NULL:
+                            continue 3;
+
+                        case 'line-comment':
+                            $this->upStatus();
+                            break;
                     }
                     break;
 
@@ -84,6 +89,12 @@ class JsFunctionsScanner extends FunctionsScanner
                         case 'double-quote':
                             break;
 
+                        case 'function':
+                            if($prev !== '/' || $next !== '/') {
+                                $this->downStatus('simple-quote');
+                            }
+                            break;
+
                         default:
                             $this->downStatus('simple-quote');
                             break;
@@ -99,6 +110,12 @@ class JsFunctionsScanner extends FunctionsScanner
                         case 'line-comment':
                         case 'block-comment':
                         case 'simple-quote':
+                            break;
+
+                        case 'function':
+                            if($prev !== '/' || $next !== '/') {
+                                $this->downStatus('double-quote');
+                            }
                             break;
 
                         default:
@@ -145,7 +162,12 @@ class JsFunctionsScanner extends FunctionsScanner
                     break;
 
                 case ',':
+                case ';':
                     switch ($this->status()) {
+                        case NULL:
+                            $buffer = '';
+                            continue 3;
+
                         case 'function':
                             if (($argument = self::prepareArgument($buffer))) {
                                 $bufferFunctions[0][2][] = $argument;
@@ -164,7 +186,10 @@ class JsFunctionsScanner extends FunctionsScanner
                             break;
 
                         default:
-                            continue 3;
+                            if(!in_array($buffer, ['new', 'function'])) {
+                                continue 3;
+                            }
+                            break;
                     }
                     break;
             }
