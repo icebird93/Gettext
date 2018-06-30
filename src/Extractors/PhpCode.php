@@ -39,6 +39,10 @@ class PhpCode extends Extractor implements ExtractorInterface
             'dnp__' => 'dnpgettext',
             'noop' => 'noop',
             'noop__' => 'noop',
+            'ICE::gettext' => 'gettext',
+            'ICE::ngettext' => 'ngettext',
+            'ICE::dgettext' => 'pgettext',
+            'ICE::dngettext' => 'npgettext',
         ],
     ];
 
