@@ -188,6 +188,7 @@ class JsFunctionsScanner extends FunctionsScanner
 
                         default:
                             if(!in_array($buffer, ['new', 'function'])) {
+                                $buffer = '';
                                 continue 3;
                             }
                             break;
